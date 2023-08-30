@@ -1,0 +1,175 @@
+package ex02;
+
+import java.util.Scanner;
+
+public class Coll05
+{
+	public static void main(String[] args)
+	{
+		/*
+		Q. 게임설명 : 가위바위보 게임을 메소드를 통해 구현한다. 
+		1.난수생성기를 이용하여 1, 2, 3중 하나의 숫자를 생성한다. 
+		2.사용자가 가위(1),바위(2),보(3) 중 하나를 낸다. 
+		3.승부를 판단하여 출력한다. 
+		4.1,2,3 이외의 숫자를 입력하면 잘못된 입력을 알려주고 재입력을 요구한다. 
+		5.숫자입력을 잘못한 경우는 게임횟수에 포함하지 않는다. 
+		6.게임은 몇번 진행할 것인지 게임시작하기 전 코인을 입력받고(최대 5번) 
+		재시작(1), 종료(0) 
+		7.0, 1 이외의 숫자를 입력하면 재입력을 요구해야 한다.
+		 */
+		
+		// 가위바위보게임만들기
+		Scanner input = new Scanner(System.in);
+
+		// 게임결과 값을 표현한 변수
+		int win = 0, lose = 0, draw = 0, fail = 0, count=0; 
+		// 게임횟수 변수
+		String coin;
+
+		System.out.print("동전을 넣으세요(최대 5): ");
+
+		// 값이 숫자가 아닐 경우 무한반복
+		while (!input.hasNextInt())
+		{
+			input.next();// 값이 숫자가 아니면 다음으로 넘어간다.
+			System.out.println("============================================");
+			System.out.println();
+			System.out.println("※ 동전을 잘못 넣으셨습니다. 재실행해주세요!");
+			System.out.println();
+			System.out.println("================GAME END====================");
+		}
+
+		coin = input.next();// 정상 입력된 숫자라면, 게임횟수 값 저장
+		int coinInt = Integer.valueOf(coin);// 정수형 값(int)로 형변환
+
+		// 예외인 경우 게임실행 x
+		if (coinInt > 5)
+		{
+			System.out.println("============================================");
+			System.out.println();
+			System.out.println("※ 최대 5판까지만 게임이 가능합니다.");
+			System.out.println();
+			System.out.println("================GAME END====================");
+			return;
+		} 
+		// 코인을 넣지 않았을 경우
+		else if (coinInt == 0)
+		{
+			System.out.println("============================================");
+			System.out.println();
+			System.out.println("※ 동전을 넣어주셔야 게임 실행이 가능합니다.");
+			System.out.println();
+			System.out.println("================GAME END====================");
+			return;
+		} 
+		// 음수값일 경우
+		else if (coinInt < 0)
+		{
+			System.out.println("============================================");
+			System.out.println();
+			System.out.println("※ 동전이 들어가지 않았습니다. 재실행해주세요.");
+			System.out.println();
+			System.out.println("================GAME END====================");
+			return;
+		}
+		// 이상없으면 게임 정상적으로 실행
+
+		// GAME START
+		System.out.println("===============GAME START================");
+		System.out.println();
+		System.out.println("▶ 무엇을 내시겠습니까? 가위[1] 바위[2] 보[3]");
+
+		// 코인에 입력한 횟수만큼 반복하는 게임창
+		for (int i = 0; i < coinInt; i++)
+		{
+			String npc = "", user = ""; // 컴퓨터와 사용자의 가위,바위,보 선택 변수
+			int computer = (int) Math.ceil(Math.random() * 3);// 난수 생성(랜덤)
+
+			while (!input.hasNextInt())
+			{ // 값이 숫자인지 판별,입력값이 숫자가 아니라면 while문 실행
+				input.next();// 값이 숫자가 아니면 버린다.
+				System.out.println("=========================================");
+				System.out.println("▶ 잘못 입력하셨습니다.");
+				System.out.println("▷ 가위[1] 바위[2] 보[3] 재입력: ");
+				System.out.println("=========================================");
+			}
+			
+			String userInput = input.next();// 사용자의 입력값
+			int userInputInt = Integer.parseInt(userInput);
+			// 유저의 가위바위보
+			switch (userInputInt)
+			{
+			case 1:
+				user = "가위";
+				count++;
+				break;
+			case 2:
+				user = "바위";
+				count++;
+				break;
+			case 3:
+				user = "보";
+				count++;
+				break;
+			default:
+				user = "손가락 오류";
+			}
+			// 컴퓨터의 가위바위보
+			switch (computer)
+			{
+			case 1:
+				npc = "가위";
+				break;
+			case 2:
+				npc = "바위";
+				break;
+			case 3:
+				npc = "보";
+				break;
+			default:
+				npc = "시스템 오류";
+			}
+
+			System.out.println("[유저] " + user + " VS " + npc + " [컴퓨터]");
+
+			// 가위바위보 승패 설정
+			if (userInputInt >= 1 && userInputInt <= 3)
+			{// 유저의 가위바위보 입력값이 1~3일 때만 정상 진행
+				// 가위=1,바위=2,보=3
+				if ((computer == 1 && userInputInt == 2) || (computer == 2 && userInputInt == 3)
+						|| (computer == 3 && userInputInt == 1))
+				{// 유저가 이긴경우
+					win++;
+					System.out.println("[승리]");
+				} 
+				else if (computer == userInputInt)
+				{// 무승부인경우
+					draw++;
+					System.out.println("[무승부]");
+				} 
+				else
+				{
+					lose++;
+					System.out.println(coinInt + "판쨰중");
+					System.out.println("[패배]");
+				}
+			} 
+			else
+			{// 오류상황
+				fail++;
+				coinInt++; //게임횟수에 포함하지 않는 재입력 요구
+				System.out.println("가위[1] 바위[2] 보[3] 재입력:");
+			}
+			System.out.println("=========================================");
+		}
+		float wins = ((float) win / (float) (coinInt)) * 100; // 승률변수 =(이긴횟수/총 경기)x100
+
+		System.out.println("[결과] 게임 횟수 : " + coin);
+		System.out.println("[전적] win:" + win + "번, lose:" + lose + "번, draw:" + draw + "번, 무효:" + fail + "번");
+		System.out.printf("[승률] %.2f%% \n", wins);
+		System.out.println("================GAME END=================");
+
+		input.close();
+
+	}
+}

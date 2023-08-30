@@ -1,0 +1,96 @@
+package ex02;
+
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Scanner;
+import java.util.Set;
+import java.util.StringTokenizer;
+
+/*Q. "그만"이 입력될 때까지 입력키, 아이디, 비밀번호 정보를 가진 ID 클래스를 작성하고
+입력키를 '키'로 하는 HashMap<String, ID> 컬렉션을 만들어서 사용자로부터 입력받아
+입력키: 네이버, 다음, 쿠팡, 티몬, 애플로 계정을 저장하시오.
+그리고 입력키로 아이디, 비밀번호를 출력하는 프로그램을 만드시오*/
+class ID
+{
+	private String key;
+	private int longitude, latitude; // 경도, 위도
+
+	public ID(String key, int longitude, int latitude)
+	{
+		this.key = key;
+		this.longitude = longitude;
+		this.latitude = latitude;
+	}
+
+	public String getkey()
+	{
+		return key;
+	}
+
+	public int getLongitute()
+	{
+		return longitude;
+	}
+
+	public int getLatitude()
+	{
+		return latitude;
+	}
+}
+
+public class Coll04
+{
+	public static void main(String[] args)
+	{
+		Scanner sc = new Scanner(System.in);
+		HashMap<String, ID> info = new HashMap<String, ID>();
+
+		System.out.println("도시, 경도, 위도를 입력하세요.");
+
+		for (int i = 0; i < 4; i++)
+		{
+			System.out.print(">> ");
+			String text = sc.nextLine();
+			StringTokenizer st = new StringTokenizer(text, ",");
+			String key = st.nextToken().trim();
+			int longitude = Integer.parseInt(st.nextToken().trim());
+			int latitude = Integer.parseInt(st.nextToken().trim());
+
+			ID ID = new ID(key, longitude, latitude);
+			info.put(key, ID);
+		}
+
+		Set<String> key = info.keySet(); // 해시맵 info에 있는 모든 키 Set 컬렉션으로 리턴
+		Iterator<String> it = key.iterator(); // Set을 순차검색하는 이터레이터 리턴
+		System.out.println("---------------------------");
+		while (it.hasNext())
+		{
+			String key = it.next();
+			ID ID = info.get(key); // 이름을 키로 하여 객체를 얻는다.
+			System.out.print(ID.getkey() + " ");
+			System.out.print(ID.getLongitute() + " ");
+			System.out.println(ID.getLatitude() + " ");
+		}
+		System.out.println("---------------------------");
+
+		while (true)
+		{
+			System.out.print("도시 이름 >> ");
+			String key = sc.nextLine();
+			if (key.equals("그만"))
+				break;
+
+			ID ID = info.get(key); // 해시맵에서 이름을 키로 검색
+			if (ID == null)
+			{ // 이름이 해시맵에 없다면
+				System.out.println(key + "는 없습니다.");
+			} else
+			{ // 해시맵에서 검색된 Student 객체
+				System.out.print(ID.getkey() + " ");
+				System.out.print(ID.getLongitute() + " ");
+				System.out.println(ID.getLatitude());
+			}
+		}
+		sc.close();
+	}
+}
